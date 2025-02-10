@@ -2213,17 +2213,17 @@ fn renderArrayInit(
             const start = sub_expr_buffer_starts[i];
             const end = sub_expr_buffer_starts[i + 1];
             const expr_text = sub_expr_buffer.items[start..end];
-                var by_line = std.mem.splitScalar(u8, expr_text, '\n');
-                var last_line_was_empty = false;
-                while (by_line.next()) |line| {
-                    if (std.mem.startsWith(u8, line, "//") and last_line_was_empty) {
-                        try ais.insertNewline();
-                    } else {
-                        try ais.maybeInsertNewline();
-                    }
-                    last_line_was_empty = (line.len == 0);
-                    try ais.writer().writeAll(line);
+            var by_line = std.mem.splitScalar(u8, expr_text, '\n');
+            var last_line_was_empty = false;
+            while (by_line.next()) |line| {
+                if (std.mem.startsWith(u8, line, "//") and last_line_was_empty) {
+                    try ais.insertNewline();
+                } else {
+                    try ais.maybeInsertNewline();
                 }
+                last_line_was_empty = (line.len == 0);
+                try ais.writer().writeAll(line);
+            }
 
             if (i + 1 < section_exprs.len) {
                 const next_expr = section_exprs[i + 1];
