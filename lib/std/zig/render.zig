@@ -2213,12 +2213,8 @@ fn renderArrayInit(
             const start = sub_expr_buffer_starts[i];
             const end = sub_expr_buffer_starts[i + 1];
             const expr_text = sub_expr_buffer.items[start..end];
-            if (!expr_newlines[i]) {
-                try ais.writer().writeAll(expr_text);
-            } else {
                 var by_line = std.mem.splitScalar(u8, expr_text, '\n');
                 var last_line_was_empty = false;
-                try ais.writer().writeAll(by_line.first());
                 while (by_line.next()) |line| {
                     if (std.mem.startsWith(u8, line, "//") and last_line_was_empty) {
                         try ais.insertNewline();
@@ -2228,7 +2224,6 @@ fn renderArrayInit(
                     last_line_was_empty = (line.len == 0);
                     try ais.writer().writeAll(line);
                 }
-            }
 
             if (i + 1 < section_exprs.len) {
                 const next_expr = section_exprs[i + 1];
